@@ -10,16 +10,24 @@
     "tauri": "tauri"
   },
   "dependencies": {
+    "@fluentui/react": "^8.115.1",
+    "@fluentui/react-components": "^9.46.0",
+    "@fluentui/react-icons": "^2.0.225",
+    "@tauri-apps/api": "^1.5.2",
+    "i18next": "^23.7.19",
+    "i18next-browser-languagedetector": "^7.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "@tauri-apps/api": "^1.5.2"
+    "react-i18next": "^14.0.1",
+    "react-router-dom": "^6.21.3"
   },
   "devDependencies": {
+    "@tauri-apps/cli": "^1.5.8",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@vitejs/plugin-react": "^4.2.1",
+    "sass": "^1.70.0",
     "typescript": "^5.0.2",
-    "vite": "^5.0.0",
-    "@tauri-apps/cli": "^1.5.8"
+    "vite": "^5.0.0"
   }
 }

@@ -1,53 +1,86 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import { invoke } from "@tauri-apps/api/tauri";
-import "./App.css";
+import { useState } from 'react';
+import { Button, FluentProvider, webLightTheme, makeStyles } from '@fluentui/react-components';
+import { Nav, INavLinkGroup, INavLink } from '@fluentui/react';
+import { createBrowserRouter, Link, RouterProvider } from 'react-router-dom';
 
-function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
+import { Library } from '@/app/library/Library';
+import { Settings } from '@/app/settings/Settings';
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    setGreetMsg(await invoke("greet", { name }));
+import './App.scss';
+
+const router = createBrowserRouter([
+  { path: '/', element: <Library /> },
+  { path: '/settings', element: <Settings /> },
+]);
+
+const containerInitStyle = makeStyles({
+  provider: {
+    height: '100%',
+    width: '100%',
   }
+});
 
+const onLinkClick = (ev?: React.MouseEvent<HTMLElement>, item?: INavLink): void => {
+  ev?.preventDefault();
+  router.navigate(item?.url || '/');
+};
+
+const navLinkGroups: Array<INavLinkGroup> = [
+  {
+    links: [
+      {
+        name: 'Library',
+        url: '/',
+        // onClick: onLinkClick,
+      },
+      {
+        name: 'Settings',
+        url: '/settings',
+        // onClick: onLinkClick,
+      },
+    ]
+  },
+];
+
+
+
+export const App = ({
+  theme = webLightTheme,
+  className = containerInitStyle().provider,
+  navGroups = navLinkGroups,
+  grRouter = router,
+}) => {
   return (
-    <div className="container">
-      <h1>Welcome to Tauri!</h1>
-
-      <div className="row">
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <FluentProvider theme={theme} className={className}>
+    <div id="gr-container">
+      <div id="gr-header">
+        <div data-tauri-drag-region className="titlebar">
+          <div className="titlebar-button" id="titlebar-minimize">
+            <img
+              src="https://api.iconify.design/mdi:window-minimize.svg"
+              alt="minimize"
+            />
+          </div>
+          <div className="titlebar-button" id="titlebar-maximize">
+            <img
+              src="https://api.iconify.design/mdi:window-maximize.svg"
+              alt="maximize"
+            />
+          </div>
+          <div className="titlebar-button" id="titlebar-close">
+            <img src="https://api.iconify.design/mdi:close.svg" alt="close" />
+          </div>
+        </div>
       </div>
-
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
-
-      <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
-      </form>
-
-      <p>{greetMsg}</p>
+      <div id="gr-body">
+        <div id="gr-left-sidebar">
+          <Nav groups={navGroups} onLinkClick={onLinkClick}></Nav>
+        </div>
+        <div id="gr-content">
+          <RouterProvider router={grRouter} />
+        </div>
+      </div>
     </div>
+    </FluentProvider>
   );
 }
-
-export default App;

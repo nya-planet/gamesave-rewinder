@@ -1,0 +1,54 @@
+html,body,#root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+#gr-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  #gr-header {
+    height: 2rem;
+  }
+
+  #gr-body {
+    width: 100%;
+    height: 100%;
+    display: flex;
+
+    #gr-left-sidebar {
+      flex: 0 0 20%;
+      // background-color: gray;
+    }
+
+    #gr-content {
+      flex: 0 0 80%;
+      background-color: skyblue;
+    }
+  }
+}
+
+.titlebar {
+  height: 30px;
+  background: #329ea3;
+  user-select: none;
+  display: flex;
+  justify-content: flex-end;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+.titlebar-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+}
+.titlebar-button:hover {
+  background: #5bbec3;
+}
