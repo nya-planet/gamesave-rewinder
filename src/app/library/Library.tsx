@@ -1,19 +1,31 @@
-import { Label, Input, makeStyles } from "@fluentui/react-components";
+import { Label, Input, makeStyles, shorthands } from "@fluentui/react-components";
 import { SearchRegular } from "@fluentui/react-icons";
 import { GameCard } from "@/component/GameCard";
 
-const mockData = new Array(10).fill(0);
+const mockData = new Array(9).fill(0);
 
 const libraryStyle = makeStyles({
-	library: {
+	body: {
+		height: '100%',
+		display: 'flex',
+		flexDirection: 'column',
+	},
+	header: {
+		backgroundColor: 'red',
+		...shorthands.flex(0, 0, '2rem'),
+	},
+	content: {
+		height: '100%',
 		display: 'flex',
 		flexWrap: 'wrap',
+		...shorthands.flex(0, 0, '90%'),
+		overflowY: 'auto',
 	},
 });
 
-export const Library = ({gameList = mockData, className = libraryStyle().library}) => (
-	<div>
-		<div>
+export const Library = ({gameList = mockData, className = libraryStyle()}) => (
+	<div id="gr-library" className={className.body}>
+		<div className={className.header}>
 			<div>
         <Label>filter</Label>
         <Input
@@ -21,7 +33,7 @@ export const Library = ({gameList = mockData, className = libraryStyle().library
         />
       </div>
 		</div>
-		<div className={className}>
+		<div className={className.content}>
 			{gameList.map((game, i) => <GameCard key={i} />)}
 		</div>
 	</div>

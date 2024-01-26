@@ -12,6 +12,7 @@ html,body,#root {
 
   #gr-header {
     height: 2rem;
+    background-color: gray;
   }
 
   #gr-body {
@@ -32,23 +33,21 @@ html,body,#root {
 }
 
 .titlebar {
-  height: 30px;
+  height: 100%;
   background: #329ea3;
   user-select: none;
   display: flex;
   justify-content: flex-end;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
 }
+
 .titlebar-button {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  width: 30px;
-  height: 30px;
+  width: 2rem;
+  height: 100%;
 }
+
 .titlebar-button:hover {
   background: #5bbec3;
 }

@@ -1,9 +1,10 @@
-import { makeStyles } from "@fluentui/react-components";
+import { makeStyles, shorthands } from "@fluentui/react-components";
 
 const gameCardStyle = makeStyles({
 	gamecard: {
 		height: '10rem',
 		width: '10rem',
+		...shorthands.border('1px', 'solid', 'black'),
 	},
 });
 
@@ -12,7 +13,7 @@ export const GameCard = ({
 }) => {
 	return (
 		<div className={style}>
-			GameCard
+			{/* GameCard */}
 		</div>
 	);
 }
