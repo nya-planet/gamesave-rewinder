@@ -1,4 +1,10 @@
+import { GameInfoRoute, router } from '@/router/router';
 import { makeStyles, shorthands } from "@fluentui/react-components";
+
+const onGameCardClick = (ev: React.MouseEvent<HTMLElement>, item: string): void => {
+  ev?.preventDefault();
+  router.navigate(GameInfoRoute(item));
+};
 
 const gameCardStyle = makeStyles({
 	gamecard: {
@@ -10,10 +16,14 @@ const gameCardStyle = makeStyles({
 });
 
 export const GameCard = ({
+	gameId,
 	style = gameCardStyle().gamecard,
+}: {
+	gameId: string;
+	style?: string;
 }) => {
 	return (
-		<div className={style}>
+		<div className={style} onClick={(ev) => onGameCardClick(ev, gameId)}>
 			GameCard
 		</div>
 	);

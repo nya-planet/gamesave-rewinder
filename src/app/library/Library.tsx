@@ -2,7 +2,7 @@ import { Label, Input, makeStyles, shorthands } from "@fluentui/react-components
 import { SearchRegular } from "@fluentui/react-icons";
 import { GameCard } from "@/component/GameCard";
 
-const mockData = new Array(20).fill(0);
+const mockData = new Array(20).fill(0).map((_, i) => ({ id: `${i}`, name: `game-${i}` }));
 
 const libraryStyle = makeStyles({
 	body: {
@@ -36,7 +36,7 @@ export const Library = ({gameList = mockData, className = libraryStyle()}) => (
       </div>
 		</div>
 		<div id="gr-library-content" className={className.content}>
-			{gameList.map((game, i) => <GameCard key={i} />)}
+			{gameList.map(game => <GameCard key={game.id} gameId={game.id} />)}
 		</div>
 	</div>
 );

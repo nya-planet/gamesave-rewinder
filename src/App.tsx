@@ -1,18 +1,12 @@
 import { useState } from 'react';
 import { Button, FluentProvider, webLightTheme, makeStyles } from '@fluentui/react-components';
 import { Nav, INavLinkGroup, INavLink } from '@fluentui/react';
-import { createBrowserRouter, Link, RouterProvider } from 'react-router-dom';
+import { RouterProvider } from 'react-router-dom';
 
+import { router } from '@/router/router';
 import { Titlebar } from '@/component/Titlebar';
-import { Library } from '@/app/library/Library';
-import { Settings } from '@/app/settings/Settings';
 
 import './App.scss';
-
-const router = createBrowserRouter([
-  { path: '/', element: <Library /> },
-  { path: '/settings', element: <Settings /> },
-]);
 
 const containerInitStyle = makeStyles({
   provider: {
@@ -39,7 +33,15 @@ const navLinkGroups: Array<INavLinkGroup> = [
         url: '/settings',
         // onClick: onLinkClick,
       },
-    ]
+      {
+        name: 'GameInfo',
+        url: '/gameinfo',
+      },
+      {
+        name: 'About',
+        url: '/about',
+      },
+    ],
   },
 ];
 
