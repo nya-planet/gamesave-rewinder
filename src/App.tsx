@@ -3,6 +3,7 @@ import { Button, FluentProvider, webLightTheme, makeStyles } from '@fluentui/rea
 import { Nav, INavLinkGroup, INavLink } from '@fluentui/react';
 import { createBrowserRouter, Link, RouterProvider } from 'react-router-dom';
 
+import { Titlebar } from '@/component/Titlebar';
 import { Library } from '@/app/library/Library';
 import { Settings } from '@/app/settings/Settings';
 
@@ -54,23 +55,7 @@ export const App = ({
     <FluentProvider theme={theme} className={className}>
     <div id="gr-container">
       <div id="gr-header">
-        <div data-tauri-drag-region className="titlebar">
-          <div className="titlebar-button" id="titlebar-minimize">
-            <img
-              src="https://api.iconify.design/mdi:window-minimize.svg"
-              alt="minimize"
-            />
-          </div>
-          <div className="titlebar-button" id="titlebar-maximize">
-            <img
-              src="https://api.iconify.design/mdi:window-maximize.svg"
-              alt="maximize"
-            />
-          </div>
-          <div className="titlebar-button" id="titlebar-close">
-            <img src="https://api.iconify.design/mdi:close.svg" alt="close" />
-          </div>
-        </div>
+        <Titlebar />
       </div>
       <div id="gr-body">
         <div id="gr-left-sidebar">

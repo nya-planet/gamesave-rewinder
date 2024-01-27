@@ -4,6 +4,7 @@ const gameCardStyle = makeStyles({
 	gamecard: {
 		height: '10rem',
 		width: '10rem',
+		// backgroundColor: 'grey',
 		...shorthands.border('1px', 'solid', 'black'),
 	},
 });
@@ -13,7 +14,7 @@ export const GameCard = ({
 }) => {
 	return (
 		<div className={style}>
-			{/* GameCard */}
+			GameCard
 		</div>
 	);
 }
