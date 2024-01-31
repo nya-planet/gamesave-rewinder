@@ -12,11 +12,13 @@ const libraryStyle = makeStyles({
 		flexDirection: 'column',
 	},
 	header: {
-		backgroundColor: 'red',
+		backgroundColor: 'grey',
 		...shorthands.flex(0, 0, '2rem'),
 	},
 	content: {
+		boxSizing: 'border-box',
 		...shorthands.flex(0, 0, 'calc(100% - 2rem)'),
+		...shorthands.padding('1rem'),
 		height: 'calc(100% - 2rem)',
 		width: '100%',
 		display: 'grid',
@@ -31,7 +33,7 @@ export const Library = ({gameList = mockData, className = libraryStyle()}) => (
 			<div>
         <Label>filter</Label>
         <Input
-          contentAfter={<SearchRegular aria-label="Enter by voice" />}
+          contentBefore={<SearchRegular aria-label="Enter by voice" />}
         />
       </div>
 		</div>

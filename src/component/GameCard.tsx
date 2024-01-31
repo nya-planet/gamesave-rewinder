@@ -10,8 +10,8 @@ const gameCardStyle = makeStyles({
 	gamecard: {
 		height: '10rem',
 		width: '10rem',
-		// backgroundColor: 'grey',
-		...shorthands.border('1px', 'solid', 'black'),
+		...shorthands.margin('0.5rem'),
+		boxShadow: '0 0 0.2rem 0.2rem rgba(0, 0, 0, 0.5)',
 	},
 });
 

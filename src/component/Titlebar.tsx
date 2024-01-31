@@ -1,16 +1,19 @@
-import { ArrowMaximize16Regular, Maximize20Regular, Add24Regular } from '@fluentui/react-icons';
+import { RemoveIcon, BackToWindowIcon, FullScreenIcon, ChromeCloseIcon } from '@fluentui/react-icons-mdl2';
 
 export const Titlebar = () => {
   return (
     <div data-tauri-drag-region id="titlebar">
       <div className="titlebar-button" id="titlebar-minimize">
-        <ArrowMaximize16Regular />
+				<RemoveIcon />
+      </div>
+      <div className="titlebar-button" id="titlebar-restore">
+				<BackToWindowIcon />
       </div>
       <div className="titlebar-button" id="titlebar-maximize">
-        <Maximize20Regular />
+				<FullScreenIcon />
       </div>
       <div className="titlebar-button" id="titlebar-close">
-        <Add24Regular style={{ 'rotate': '45deg' }} />
+				<ChromeCloseIcon />
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import { Button, FluentProvider, webLightTheme, makeStyles } from '@fluentui/rea
 import { Nav, INavLinkGroup, INavLink } from '@fluentui/react';
 import { RouterProvider } from 'react-router-dom';
 
-import { router } from '@/router/router';
+import { LibraryRoute, SettingsRoute, AboutRoute, router } from '@/router/router';
 import { Titlebar } from '@/component/Titlebar';
 
 import './App.scss';
@@ -25,21 +25,15 @@ const navLinkGroups: Array<INavLinkGroup> = [
     links: [
       {
         name: 'Library',
-        url: '/',
-        // onClick: onLinkClick,
+        url: LibraryRoute,
       },
       {
         name: 'Settings',
-        url: '/settings',
-        // onClick: onLinkClick,
-      },
-      {
-        name: 'GameInfo',
-        url: '/gameinfo',
+        url: SettingsRoute,
       },
       {
         name: 'About',
-        url: '/about',
+        url: AboutRoute,
       },
     ],
   },
