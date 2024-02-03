@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button, FluentProvider, webLightTheme, makeStyles } from '@fluentui/react-components';
 import { Nav, INavLinkGroup, INavLink } from '@fluentui/react';
 import { RouterProvider } from 'react-router-dom';
+import i18next from '@/i18n/i18n';
 
 import { LibraryRoute, SettingsRoute, AboutRoute, router } from '@/router/router';
 import { Titlebar } from '@/component/Titlebar';
@@ -24,15 +25,15 @@ const navLinkGroups: Array<INavLinkGroup> = [
   {
     links: [
       {
-        name: 'Library',
+        name: i18next.t('library'),
         url: LibraryRoute,
       },
       {
-        name: 'Settings',
+        name: i18next.t('settings'),
         url: SettingsRoute,
       },
       {
-        name: 'About',
+        name: i18next.t('about'),
         url: AboutRoute,
       },
     ],

@@ -12,14 +12,13 @@ const libraryStyle = makeStyles({
 		flexDirection: 'column',
 	},
 	header: {
-		backgroundColor: 'grey',
 		...shorthands.flex(0, 0, '2rem'),
+		backgroundColor: 'grey',
 	},
 	content: {
 		boxSizing: 'border-box',
-		...shorthands.flex(0, 0, 'calc(100% - 2rem)'),
 		...shorthands.padding('1rem'),
-		height: 'calc(100% - 2rem)',
+		...shorthands.flex(0, 0, 'calc(100% - 2rem)'),
 		width: '100%',
 		display: 'grid',
 		gridTemplateColumns: 'repeat(auto-fill, minmax(10rem, 1fr))',

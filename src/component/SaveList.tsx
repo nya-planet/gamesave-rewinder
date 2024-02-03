@@ -13,43 +13,52 @@ import {
   IObjectWithKey,
 } from '@fluentui/react';
 
-import { Game } from '@/types/Game';
+import { Input } from '@fluentui/react-components';
+
+import i18next from '@/i18n/i18n';
+
+import { GameSave } from '@/types/GameSave';
 const _saveColumns: Array<IColumn> = [
   {
-    key: 'column1',
-    name: 'Name',
-    fieldName: 'name',
+    key: 'time',
+    name: i18next.t('save.time'),
+    fieldName: 'time',
     minWidth: 100,
-    maxWidth: 200,
+    maxWidth: 100,
     isResizable: true,
   },
   {
-    key: 'column2',
-    name: 'Value',
-    fieldName: 'value',
+    key: 'description',
+    name: i18next.t('save.description'),
+    fieldName: 'description',
     minWidth: 100,
-    maxWidth: 200,
+    maxWidth: 100,
     isResizable: true,
   },
 ];
 
-const getGameKey = (item: Game, index?: number) => {
-  return item.id;
+const getGameKey = (item: GameSave, index?: number) => {
+  return `${item.gameId}-${item.time}`;
 };
 
-const gameSelection: ISelection<IObjectWithKey | Game> = new Selection<
-  IObjectWithKey | Game
+const gameSelection: ISelection<IObjectWithKey | GameSave> = new Selection<
+  IObjectWithKey | GameSave
 >({
   onSelectionChanged: () => {
     // setSelectedItems((_selection as ISelection<IDataType>).getSelection());
   },
-  getKey: (item: Game) => {
-    return item.id;
-  },
+  getKey: getGameKey,
 });
 
-const onItemInvoked = (item: Game, index?: number, ev?: Event) => {
-  alert(`Item ${item.id} invoked`);
+const _onItemInvoked = (item: GameSave, index?: number, ev?: Event) => {
+  console.log(`Item ${item.gameId} ${item.time} invoked`);
+};
+
+const _onRenderRow = (props?: any, defaultRender?: any) => {
+  console.log(props, defaultRender);
+  return (
+    defaultRender(props)
+  );
 };
 
 const _classNames = mergeStyleSets({
@@ -76,6 +85,7 @@ const _classNames = mergeStyleSets({
     maxWidth: '16px',
   },
   controlWrapper: {
+    width: '100%',
     display: 'flex',
     flexWrap: 'wrap',
   },
@@ -88,6 +98,7 @@ const _classNames = mergeStyleSets({
     marginBottom: '20px',
   },
 });
+
 const controlStyles = {
   root: {
     margin: '0 30px 20px 0',
@@ -111,14 +122,14 @@ const _onChangeText = (
   // this.setState({ items: text ? this._allItems.filter(i => i.name.toLowerCase().indexOf(text) > -1) : this._allItems });
 };
 
-const _getSelectionDetails = (selection: ISelection<Game>): string => {
+const _getSelectionDetails = (selection: ISelection<GameSave>): string => {
   const selectionCount = selection.getSelectedCount();
 
   switch (selectionCount) {
     case 0:
       return 'No items selected';
     case 1:
-      return '1 item selected: ' + (selection.getSelection()[0] as Game).name;
+      return '1 item selected: ' + (selection.getSelection()[0] as GameSave).time;
     default:
       return `${selectionCount} items selected`;
   }
@@ -129,7 +140,7 @@ const _getSelectionDetails = (selection: ISelection<Game>): string => {
 //https://github.com/microsoft/fluentui/issues/19657
 
 export const SaveList = ({
-  saveItems = [],
+  saveItems = [] as Array<GameSave>,
   saveColumns = _saveColumns,
   getKey = getGameKey,
   selection = gameSelection,
@@ -139,32 +150,12 @@ export const SaveList = ({
   onChangeText = _onChangeText,
   announcedMessage = '',
   getSelectionDetails = _getSelectionDetails,
+  onItemInvoked = _onItemInvoked,
 }) => {
-  const selectionDetails = getSelectionDetails(selection as ISelection<Game>);
+  const selectionDetails = getSelectionDetails(selection as ISelection<GameSave>);
 
   return (
     <div>
-      <div className={classNames.controlWrapper}>
-        <Toggle
-          label="Enable modal selection"
-          checked={isModalSelection}
-          onChange={onChangeModalSelection}
-          onText="Modal"
-          offText="Normal"
-          styles={controlStyles}
-        />
-        <TextField
-          label="Filter by name:"
-          onChange={onChangeText}
-          styles={controlStyles}
-        />
-        <Announced
-          message={`Number of items after filter applied: ${saveItems.length}.`}
-        />
-      </div>
-      <div className={classNames.selectionDetails}>{selectionDetails}</div>
-      <Announced message={selectionDetails} />
-      {announcedMessage ? <Announced message={announcedMessage} /> : undefined}
       {isModalSelection ? (
         <MarqueeSelection selection={selection as ISelection<IObjectWithKey>}>
           <DetailsList
@@ -172,11 +163,12 @@ export const SaveList = ({
             columns={saveColumns}
             selectionMode={SelectionMode.multiple}
             setKey="multiple"
-            layoutMode={DetailsListLayoutMode.justified}
+            layoutMode={DetailsListLayoutMode.fixedColumns}
             isHeaderVisible={true}
             selection={selection as ISelection<IObjectWithKey>}
             selectionPreservedOnEmptyClick={true}
-            // onItemInvoked={this._onItemInvoked}
+            onItemInvoked={onItemInvoked}
+            onRenderRow={_onRenderRow}
             enterModalSelectionOnTouch={true}
             ariaLabelForSelectionColumn="Toggle selection"
             ariaLabelForSelectAllCheckbox="Toggle selection for all items"
@@ -190,9 +182,10 @@ export const SaveList = ({
           selectionMode={SelectionMode.none}
           getKey={getKey}
           setKey="none"
-          layoutMode={DetailsListLayoutMode.justified}
+          layoutMode={DetailsListLayoutMode.fixedColumns}
           isHeaderVisible={true}
-          // onItemInvoked={this._onItemInvoked}
+          onItemInvoked={onItemInvoked}
+          onRenderRow={_onRenderRow}
         />
       )}
     </div>
