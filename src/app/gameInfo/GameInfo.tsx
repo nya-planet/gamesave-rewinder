@@ -20,7 +20,7 @@ import { GameSave } from '@/types/GameSave';
 import { IChoiceGroupOption } from '@fluentui/react';
 import { ModeSwitch, ViewMode } from '@/component/ModeSwitch';
 import { useState } from 'react';
-import { SaveListCard } from '@/component/SaveListCard';
+import { SaveFileCard } from '@/component/SaveFileCard';
 
 const mockData: Array<Game> = new Array(20)
   .fill(0)
@@ -71,13 +71,21 @@ const gameInfoStyle = makeStyles({
     minWidth: '2rem',
   },
   content: {
-    boxSizing: 'border-box',
     ...shorthands.flex(0, 0, 'calc(100% - 6rem)'),
     height: 'calc(100% - 2rem)',
     width: '100%',
     // display: 'grid',
     // gridTemplateColumns: 'repeat(auto-fill, 1fr)',
     overflowY: 'auto',
+  },
+  saveFileCardContainer: {
+    boxSizing: 'border-box',
+    ...shorthands.padding('1rem'),
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(10rem, 1fr))',
+  },
+  saveFileCard: {
+    width: '10rem',
   },
 });
 
@@ -146,7 +154,9 @@ export const GameInfo = () => {
             onChangeText={onChangeText}
           />
           :
-          <SaveListCard />
+          <div className={className.saveFileCardContainer}>
+            {saveMock.map((s) => <SaveFileCard key={s.gameId} className={className.saveFileCard} gameSave={s} />)}
+          </div>
         }
       </div>
     </div>

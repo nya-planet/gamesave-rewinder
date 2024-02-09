@@ -29,24 +29,22 @@ export const ModeSwitch = ({
 
   return (
     <div className={className} >
+			<ToggleButton
+				icon={<PictureCenterIcon />}
+				className={buttonClassName}
+				shape="square"
+				onClick={Click('thumbnail')}
+				checked={mode === 'thumbnail'}
+				disabled={mode === 'thumbnail'}
+			/>
       <ToggleButton
+				icon={<BulletedListIcon />}
         className={buttonClassName}
         shape="square"
         onClick={Click('list')}
         checked={mode === 'list'}
 				disabled={mode === 'list'}
-      >
-        <BulletedListIcon />
-      </ToggleButton>
-      <ToggleButton
-        className={buttonClassName}
-        shape="square"
-        onClick={Click('thumbnail')}
-        checked={mode === 'thumbnail'}
-				disabled={mode === 'thumbnail'}
-      >
-        <PictureCenterIcon />
-      </ToggleButton>
+      />
     </div>
   );
 };

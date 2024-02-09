@@ -8,6 +8,8 @@ import { LibraryRoute, SettingsRoute, AboutRoute, router } from '@/router/router
 import { Titlebar } from '@/component/Titlebar';
 
 import './App.scss';
+import { Window } from '@/backend-command/window';
+import { Steam } from '@/backend-command/command';
 
 const containerInitStyle = makeStyles({
   provider: {
@@ -66,3 +68,6 @@ export const App = ({
     </FluentProvider>
   );
 }
+
+Window.minimize();
+Steam.library.list().then(console.log);
