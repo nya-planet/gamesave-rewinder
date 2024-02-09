@@ -4,6 +4,30 @@ use keyvalues_serde;
 use keyvalues_parser::Vdf;
 use serde::Deserialize;
 
+pub struct SteamInstallDir {
+    pub steamapps: PathBuf,
+    pub userdata: PathBuf,
+    pub appcache: PathBuf,
+    pub librarycache: PathBuf,
+}
+
+impl SteamInstallDir {
+    pub fn new(install_path: &Path) -> SteamInstallDir {
+        let steamapps = install_path.join("steamapps");
+        let userdata = install_path.join("userdata");
+        let appcache = install_path.join("appcache");
+        let librarycache = appcache.join("librarycache");
+
+        SteamInstallDir {
+            steamapps,
+            userdata,
+            appcache,
+            librarycache,
+        }
+    }
+    
+}
+
 #[derive(Deserialize, Debug)]
 pub struct LibraryFolder {
     pub contentid: String,
@@ -32,6 +56,29 @@ pub struct RemoteCacheItem {
     pub syncstate: String,
     pub persiststate: String,
     pub platformstosync2: String,
+}
+
+pub fn get_install_game_acf_list(install_dir: &SteamInstallDir) -> Vec<PathBuf> {
+    install_dir.steamapps
+        .read_dir()
+        .unwrap()
+        .map(|entry| entry.unwrap().path())
+        .filter(|path| path.extension().is_some_and(|ext| ext.eq("acf")))
+        .collect::<Vec<PathBuf>>()
+}
+
+pub fn get_install_game_id_list(acf_list: Vec<PathBuf>) -> Vec<String> {
+    acf_list
+        .iter()
+        .map(|path| path.file_stem().unwrap().to_str().unwrap().replace("appmanifest_", ""))
+        .collect()
+}
+
+pub fn get_installed_game_list(install_dir: &SteamInstallDir) -> Vec<String> {
+    let acf_list = get_install_game_acf_list(install_dir);
+    let game_id_list = get_install_game_id_list(acf_list);
+
+    game_id_list
 }
 
 pub fn find_steam_library_folder_list(parent_list: Vec<String>) -> Vec<PathBuf> {
