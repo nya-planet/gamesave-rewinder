@@ -1,5 +1,5 @@
 import { Label, Input, makeStyles, shorthands } from "@fluentui/react-components";
-import { SearchRegular } from "@fluentui/react-icons";
+import { SearchIcon } from "@fluentui/react-icons-mdl2";
 import { GameCard } from "@/component/GameCard";
 
 const mockData = new Array(20).fill(0).map((_, i) => ({ id: `${i}`, name: `game-${i}` }));
@@ -32,7 +32,7 @@ export const Library = ({gameList = mockData, className = libraryStyle()}) => (
 			<div>
         <Label>filter</Label>
         <Input
-          contentBefore={<SearchRegular aria-label="Enter by voice" />}
+          contentBefore={<SearchIcon aria-label="Enter by voice" />}
         />
       </div>
 		</div>

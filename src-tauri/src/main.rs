@@ -7,6 +7,7 @@ mod state;
 mod command;
 mod system_info;
 mod game_library;
+mod utils;
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 
 

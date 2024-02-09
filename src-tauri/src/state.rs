@@ -1,6 +1,6 @@
 use std::{path::{Path, PathBuf}, sync::Mutex};
 
-use crate::{game_library, system_info};
+use crate::{command::steam_library, game_library, system_info, utils};
 
 pub struct CacheState {
     pub steam_install_path: PathBuf,
@@ -33,13 +33,12 @@ impl CacheState {
 
         let vdf_list = vdf_path_list
             .iter()
-            .map(|x| game_library::steam::read_vdf_file(x))
+            .map(|x| game_library::steam::read_libraryfolder_vdf(utils::read_to_string(x)))
             .filter(Result::is_ok)
             .map(Result::unwrap)
-            .collect::<Vec<String>>();
+            .collect::<Vec<game_library::steam::LibraryFolder>>();
 
         println!("{:?}", vdf_path_list);
-        game_library::steam::read_vdf_file(&Path::new("F:SteamLibrary\\libraryfolder.vdf").to_path_buf()).unwrap();
 
         self.game_save_backup_path = PathBuf::from("C:\\Users\\james\\Desktop\\game_save_backup");
         self.steam_install_path = PathBuf::from("C:\\Program Files (x86)\\Steam");
