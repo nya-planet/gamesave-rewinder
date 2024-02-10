@@ -20,6 +20,9 @@ steamworks = "0.11.0"
 keyvalues-serde = "0.2.1"
 keyvalues-parser = "0.2.0"
 winreg = "0.52.0"
+reqwest = "0.11.24"
+directories = "5.0.1"
+lnk_parser = "0.4.0"
 # windows = "0.52"
 
 [dependencies.windows]
