@@ -1,7 +1,9 @@
-use std::path::{Path, PathBuf};
+use std::{fs, path::{Path, PathBuf}};
 
+use lnk_parser::LNKParser;
 use windows::Win32::{Foundation::{HANDLE, HWND}, Storage::FileSystem, UI::Shell::{self, CSIDL_COMMON_APPDATA}};
 use winreg;
+use directories;
 
 use crate::game_library::steam;
 
@@ -29,57 +31,37 @@ pub fn get_all_drives() -> Vec<String> {
     }
 }
 
-pub fn get_folder_path() -> Option<PathBuf> {
-    unsafe {
-        let mut path: [u8; 260] = [0; 260];
-        let hwnd = HWND(0);
-        let handle_token = HANDLE(0);
-        let link_path = Shell::SHGetFolderPathA(
-            hwnd,
-            CSIDL_COMMON_APPDATA.try_into().unwrap(),
-            handle_token,
-            0,
-            &mut path,
-        );
-
-        println!("{:?}", link_path);
-        
-        match link_path {
-            Ok(_) => Some(PathBuf::from(String::from_utf8_lossy(&path).to_string())),
-            _ => None
-        }
-    }
-} 
-
 pub fn get_steam_install_path() -> Option<PathBuf> {
-    let link_path = get_folder_path();
+    let link_path = directories::BaseDirs::new().map(|x| x.home_dir().join("AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Steam\\Steam.lnk")).unwrap();
+    let mut link_file = fs::File::open(link_path).unwrap();
+    let link = LNKParser::from_reader(&mut link_file).unwrap();
+    let link_target_full_path = link.get_target_full_path().clone().unwrap();
+    let link_target_full_path = Path::new(&link_target_full_path);
+    let steam_install_path_from_shortcut = link_target_full_path.parent().map(PathBuf::from).filter(|p| p.exists());
 
-    if link_path.is_some() {
-        println!("link_path: {:?}", link_path.unwrap().exists());
-    }
-
+    println!("shortcut: {:?}", steam_install_path_from_shortcut);
 
     let hklm = winreg::RegKey::predef(winreg::enums::HKEY_LOCAL_MACHINE);
     let steam_key = hklm.open_subkey("SOFTWARE\\WOW6432Node\\Valve\\Steam").or(hklm.open_subkey("SOFTWARE\\Valve\\Steam"));
 
-    let steam_install_path_from_registry = match steam_key {
-        Ok(key) => match key.get_value::<String, _>("InstallPath") {
-            Ok(path) => Some(PathBuf::from(path)),
-            Err(_) => None
-        },
-        Err(_) => None
-    };
+    // let steam_install_path_from_registry = match steam_key {
+    //     Ok(key) => match key.get_value::<String, _>("InstallPath") {
+    //         Ok(path) => Some(PathBuf::from(path)),
+    //         Err(_) => None
+    //     },
+    //     Err(_) => None
+    // };
+
+    let steam_install_path_from_registry = steam_key
+        .map_or(None, |k| 
+            k.get_value::<String, _>("InstallPath")
+                .map(Option::Some)
+                .unwrap_or(None))
+        .map(PathBuf::from)
+        .filter(|p| p.exists());
+    
 
     println!("registry: {:?}", steam_install_path_from_registry);
-
-    match steam_install_path_from_registry {
-        Some(path) => {
-            if path.exists() {
-                return Some(path);
-            }
-        },
-        None => {}
-    }
 
     //wtf windows path
     let possible_path_slice = vec![
@@ -104,8 +86,14 @@ pub fn get_steam_install_path() -> Option<PathBuf> {
 
     println!("possible {:?}", possible_path_list);
 
-    match possible_path_list.len() {
-        0 => None,
-        _ => Some(possible_path_list[0].parent().unwrap().to_path_buf())
+    match steam_install_path_from_shortcut {
+        Some(path) => Some(path),
+        None => match steam_install_path_from_registry {
+            Some(path) => Some(path),
+            None => match possible_path_list.len() {
+                0 => None,
+                _ => Some(possible_path_list[0].parent().unwrap().to_path_buf())
+            }
+        }
     }
 }
