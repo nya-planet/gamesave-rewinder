@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 pub mod steam;
 
 pub enum GamePlatform {
@@ -20,10 +22,16 @@ impl Game for GamePlatform {
             GamePlatform::Steam(x) => x.header().await,
         }
     }
+    async fn gamesave(&self) -> Vec<PathBuf> {
+        match self {
+            GamePlatform::Steam(x) => x.gamesave().await,
+        }
+    }
 }
 
 pub trait Game {
     async fn name(&self, language: Option<String>) -> String;
     async fn cover(&self) -> String;
     async fn header(&self) -> String;
+    async fn gamesave(&self) -> Vec<PathBuf>;
 }

@@ -48,6 +48,9 @@ impl Game for SteamGame {
     async fn header(&self) -> String {
         String::from("header")
     }
+    async fn gamesave(&self) -> Vec<PathBuf> {
+        vec![]
+    }
 }
 
 pub struct SteamLibrary {
