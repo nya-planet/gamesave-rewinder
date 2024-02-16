@@ -7,31 +7,31 @@ pub enum GamePlatform {
 }
 
 impl Game for GamePlatform {
-    async fn name(&self, language: Option<String>) -> String {
+    fn name(&self, language: Option<String>) -> String {
         match self {
-            GamePlatform::Steam(x) => x.name(language).await,
+            GamePlatform::Steam(x) => x.name(language),
         }
     }
-    async fn cover(&self) -> String {
+    fn cover(&self) -> String {
         match self {
-            GamePlatform::Steam(x) => x.cover().await,
+            GamePlatform::Steam(x) => x.cover(),
         }
     }
-    async fn header(&self) -> String {
+    fn header(&self) -> String {
         match self {
-            GamePlatform::Steam(x) => x.header().await,
+            GamePlatform::Steam(x) => x.header(),
         }
     }
-    async fn gamesave(&self) -> Vec<PathBuf> {
+    fn gamesave(&self, language: Option<String>) -> Vec<PathBuf> {
         match self {
-            GamePlatform::Steam(x) => x.gamesave().await,
+            GamePlatform::Steam(x) => x.gamesave(language),
         }
     }
 }
 
 pub trait Game {
-    async fn name(&self, language: Option<String>) -> String;
-    async fn cover(&self) -> String;
-    async fn header(&self) -> String;
-    async fn gamesave(&self) -> Vec<PathBuf>;
+    fn name(&self, language: Option<String>) -> String;
+    fn cover(&self) -> String;
+    fn header(&self) -> String;
+    fn gamesave(&self, languge: Option<String>) -> Vec<PathBuf>;
 }
