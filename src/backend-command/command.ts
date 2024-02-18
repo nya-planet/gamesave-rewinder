@@ -1,3 +1,4 @@
+import { Game } from "@/types/Game";
 import { invoke } from "@tauri-apps/api";
 
 const STEAM_COMMAND_PREFIX = "plugin:steam_library|";
@@ -9,7 +10,7 @@ const steamLibraryCommand = (command: string) => {
 
 export const Steam = {
 	library: {
-		list: async () => {
+		list: async (): Promise<Array<Game>> => {
 			return await invoke(steamLibraryCommand('get_game_list'));
 		},
 	},

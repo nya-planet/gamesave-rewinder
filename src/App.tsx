@@ -69,5 +69,4 @@ export const App = ({
   );
 }
 
-Window.minimize();
-Steam.library.list().then(console.log);
+// Window.minimize();

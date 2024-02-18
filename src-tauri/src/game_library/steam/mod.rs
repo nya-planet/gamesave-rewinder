@@ -1,4 +1,5 @@
-use std::{collections::BTreeMap, path::{Path, PathBuf}, convert::TryFrom};
+use std::{collections::BTreeMap, convert::TryFrom, path::{Path, PathBuf}};
+use std::fmt::Display;
 
 use keyvalues_serde;
 use keyvalues_parser::Vdf;
@@ -91,6 +92,7 @@ pub struct Steam {
     pub appcache: PathBuf,
     pub librarycache: PathBuf,
     pub libraryfolder_list: Vec<SteamLibraryfolder>,
+    pub game_list: Vec<SteamGame>,
 }
 
 impl Steam {
@@ -102,7 +104,19 @@ impl Steam {
 
         let libraryfolders_vdf_content = read_to_string(steamapps.join(LIBRARYFOLDERS_VDF_FILENAME).as_path());
         let libraryfolder_map: BTreeMap<String, SteamLibraryfolder> = keyvalues_serde::from_str(&libraryfolders_vdf_content).unwrap();
-        let libraryfolder_list = libraryfolder_map.into_values().collect();
+        let libraryfolder_list: Vec<SteamLibraryfolder> = libraryfolder_map.into_values().collect();
+        let game_list: Vec<SteamGame> = libraryfolder_list
+            .iter()
+            .map(|l| 
+                l.get_game_acf_list().unwrap()
+                    .into_iter()
+                    .map(|(k, v)| SteamGame {
+                        appid: k,
+                        name: v.name.unwrap(),
+                        library: l.clone(),
+                    }))
+            .flatten()
+            .collect();
 
         Steam {
             install_path: install_path.to_path_buf(),
@@ -111,40 +125,20 @@ impl Steam {
             appcache,
             librarycache,
             libraryfolder_list,
+            game_list: game_list,
         }
     }
 
-    pub fn get_installed_game_list(&self) -> Vec<String> {
-        let libraryfolder_list = &self.libraryfolder_list;
-
-        let game_id_list = libraryfolder_list
-            .iter()
-            .map(|l| 
-                l.apps
-                    .keys()
-                    .map(|k| k.clone())
-                    .collect::<Vec<String>>())
-            .flatten()
-            .collect();
-
-        let tt = libraryfolder_list
-            .iter()
-            .map(|l| 
-                l.get_game_acf_list().unwrap())
-            .collect::<Vec<BTreeMap<String, SteamAppConfigurationFile>>>();
-
-        for x in tt {
-            for (k, v) in x {
-                println!("k {:?}", k);
-                println!("v {:?}", v);
-            }
-        }
-
-        // println!("libraryfolders  {:?}", libraryfolder_list);
-
-        // println!("gameidlist  {:?}", game_id_list);
-
-        game_id_list
+    pub fn refresh(&mut self) {
+        let install_path = self.install_path.clone();
+        let refreshed = Steam::new(&install_path);
+        self.install_path = refreshed.install_path;
+        self.steamapps = refreshed.steamapps;
+        self.userdata = refreshed.userdata;
+        self.appcache = refreshed.appcache;
+        self.librarycache = refreshed.librarycache;
+        self.libraryfolder_list = refreshed.libraryfolder_list;
+        self.game_list = refreshed.game_list;
     }
 
     pub fn get_game_cover(&self, appid: &str, language: Option<String>) -> PathBuf {
@@ -162,16 +156,24 @@ impl Steam {
         //     None => self.librarycache.join(format!("{}_header_600x900.jpg", appid)),
         // }
 
-        self.librarycache.join(format!("{}_header_600x900.jpg", appid))
+        self.librarycache.join(format!("{}_header.jpg", appid))
     }
 }
 
+impl Into<String> for Steam {
+    fn into(self) -> String {
+        "Steam".to_string()
+    }
+}
+
+#[derive(Debug)]
 pub struct SteamGame {
     pub appid: String,
     pub name: String,
+    pub library: SteamLibraryfolder,
 }
 
-impl Game for SteamGame {
+impl  Game for SteamGame {
     fn name(&self, language: Option<String>) -> String {
         self.name.clone()
     }
@@ -186,7 +188,13 @@ impl Game for SteamGame {
     }
 }
 
-#[derive(Deserialize, Debug)]
+impl Display for SteamGame {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "SteamGame {{ appid: {}, name: {} }}", self.appid, self.name)
+    }
+}
+
+#[derive(Deserialize, Debug, Clone)]
 pub struct SteamLibraryfolder {
     pub path: String,
     pub label: String,

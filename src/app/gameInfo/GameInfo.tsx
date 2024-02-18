@@ -22,9 +22,7 @@ import { ModeSwitch, ViewMode } from '@/component/ModeSwitch';
 import { useState } from 'react';
 import { SaveFileCard } from '@/component/SaveFileCard';
 
-const mockData: Array<Game> = new Array(20)
-  .fill(0)
-  .map((_, i) => ({ ...DefaultGame(), id: `${i}`, name: `game-${i}` }));
+const mockData: Array<Game> = new Array(0);
 
 const saveMock: Array<GameSave> = new Array(10).fill(0).map((_, i) => ({
   gameId: `${i}`,
