@@ -25,6 +25,8 @@ import { useEffect, useState } from 'react';
 import { SaveFileCard } from '@/component/SaveFileCard';
 import { useGameLibraryStore, refresh } from '@/store/GameLibrary';
 
+import './GameInfo.scss';
+
 const saveMock: Array<GameSave> = new Array(10).fill(0).map((_, i) => ({
   gameId: `${i}`,
   time: `${i}`,
@@ -32,62 +34,6 @@ const saveMock: Array<GameSave> = new Array(10).fill(0).map((_, i) => ({
     'https://steamuserimages-a.akamaihd.net/ugc/2268189945231885036/6AE600DAE368902DDDF0CC92C9D4DE1FC1F31E3B/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false',
   description: `save-${i}`,
 }));
-
-const gameInfoStyle = makeStyles({
-  body: {
-    height: '100%',
-    width: '100%',
-    // display: 'grid',
-    gridTemplateRows: '2rem 1fr',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  header: {
-    display: 'flex',
-    // ...shorthands.flex(0, 0, 'rem'),
-    flexDirection: 'column',
-  },
-  gameInfo: {
-    backgroundColor: 'grey',
-    display: 'flex',
-    alignItems: 'center',
-    columnGap: '1rem',
-    ...shorthands.flex(0, 0, '3rem'),
-    ...shorthands.padding(0, '1rem'),
-  },
-  toolbar: {
-    backgroundColor: 'lightgrey',
-    display: 'flex',
-    alignItems: 'center',
-    ...shorthands.flex(0, 0, '3rem'),
-    ...shorthands.padding(0, '1rem'),
-    overflowY: 'auto',
-  },
-  ModeSwitch: {
-    marginLeft: 'auto',
-  },
-  modeSwitchButton: {
-    height: '2rem',
-    minWidth: '2rem',
-  },
-  content: {
-    ...shorthands.flex(0, 0, 'calc(100% - 6rem)'),
-    height: 'calc(100% - 2rem)',
-    width: '100%',
-    // display: 'grid',
-    // gridTemplateColumns: 'repeat(auto-fill, 1fr)',
-    overflowY: 'auto',
-  },
-  saveFileCardContainer: {
-    boxSizing: 'border-box',
-    ...shorthands.padding('1rem'),
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(10rem, 1fr))',
-  },
-  saveFileCard: {
-    width: '10rem',
-  },
-});
 
 const onBackClick = () => {
   router.navigate(-1);
@@ -119,7 +65,6 @@ const onChangeModalSelection = (
 };
 
 export const GameInfo = () => {
-  const className = gameInfoStyle();
   const { gameId } = useParams<{ gameId: string }>();
   const [ viewMode, setViewMode ] = useState<ViewMode>('thumbnail');
   // const refresh = useGameLibraryStore(state => state.refresh);
@@ -137,26 +82,24 @@ export const GameInfo = () => {
   }, []);
 
   return (
-    <div id="gameinfo.body" className={className.body}>
-      <div id="gameinfo.header" className={className.header}>
-        <div className={className.gameInfo}>
+    <div id="gr-gameinfo">
+      <div id="gr-gameinfo-header">
+        <div id='gr-gameinfo-info'>
           <Button style={{ minWidth: '2rem', height: '2rem' }} onClick={onBackClick} shape='square'>
             <BackIcon />
           </Button>
           <img src={convertFileSrc(game.header)} alt={game.name} style={{ height: '43px', width: '92px' }} />
           <span style={{ fontSize: '2rem' }} >{game.name}</span>
         </div>
-        <div id="fuck" className={className.toolbar}>
+        <div id="gr-gameinfo-toolbar">
           <Input></Input>
           <ModeSwitch
             defaultMode={viewMode}
-            className={className.ModeSwitch}
-            buttonClassName={className.modeSwitchButton}
             onModeChange={setViewMode}
           />
         </div>
       </div>
-      <div id="gameinfo.content" className={className.content}>
+      <div id="gr-gameinfo-content">
         { viewMode === 'list'
           ?
           <SaveList
@@ -167,8 +110,8 @@ export const GameInfo = () => {
             onChangeText={onChangeText}
           />
           :
-          <div className={className.saveFileCardContainer}>
-            {saveMock.map((s) => <SaveFileCard key={s.gameId} className={className.saveFileCard} gameSave={s} />)}
+          <div id="save-container">
+            {saveMock.map((s) => <SaveFileCard key={s.gameId} className={"save-file-card"} gameSave={s} />)}
           </div>
         }
       </div>
