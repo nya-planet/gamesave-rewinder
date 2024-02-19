@@ -14,5 +14,6 @@ export const DefaultGame = () => ({
 	id: '',
 	name: '',
 	cover: '',
+	header: '',
 	platform: '',
 });

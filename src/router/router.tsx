@@ -16,5 +16,5 @@ export const router = createBrowserRouter([
   { path: LibraryRoute, element: <Library />,  },
   { path: SettingsRoute, element: <Settings /> },
   { path: GameInfoRoute(':gameId'), element: <GameInfo /> },
-  { path: AboutRoute, element: <Library /> },
+  { path: AboutRoute, element: <Settings /> },
 ]);

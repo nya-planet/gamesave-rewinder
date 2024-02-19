@@ -42,8 +42,6 @@ const navLinkGroups: Array<INavLinkGroup> = [
   },
 ];
 
-
-
 export const App = ({
   theme = webLightTheme,
   className = containerInitStyle().provider,

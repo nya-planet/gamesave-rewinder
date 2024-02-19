@@ -19,10 +19,12 @@ body {
   display: flex;
   flex-direction: column;
 
+  $gr-header-height: 32px;
+
   #gr-header {
     height: 100%;
     width: 100%;
-    flex: 0 0 2rem;
+    flex: 0 0 $gr-header-height;
     background-color: gray;
 
     #titlebar {
@@ -49,8 +51,8 @@ body {
   }
 
   #gr-body {
-    flex: 0 0 calc(100% - 2rem);
-    height: calc(100% - 2rem);
+    flex: 0 0 calc(100% - $gr-header-height);
+    height: calc(100% - $gr-header-height);
     width: 100%;
     display: flex;
 

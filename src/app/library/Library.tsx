@@ -1,48 +1,27 @@
-import { Label, Input, makeStyles, shorthands } from "@fluentui/react-components";
+import { Label, Input } from "@fluentui/react-components";
 import { SearchIcon } from "@fluentui/react-icons-mdl2";
 import { GameCard } from "@/component/GameCard";
 import { Game } from "@/types/Game";
 import { useEffect, useState } from "react";
 import { Steam } from "@/backend-command/command";
+import { useGameLibraryStore, refresh } from "@/store/GameLibrary";
 
-const libraryStyle = makeStyles({
-	body: {
-		height: '100%',
-		width: '100%',
-		display: 'flex',
-		flexDirection: 'column',
-	},
-	header: {
-		...shorthands.flex(0, 0, '2rem'),
-		backgroundColor: 'grey',
-	},
-	content: {
-		boxSizing: 'border-box',
-		...shorthands.padding('1rem'),
-		...shorthands.flex(0, 0, 'calc(100% - 2rem)'),
-		width: '100%',
-		display: 'grid',
-		gridTemplateColumns: 'repeat(auto-fill, minmax(10rem, 1fr))',
-		overflowY: 'auto',
-	},
-});
+import './Library.scss';
 
-export const Library = ({gameList = [] as Array<Game>, className = libraryStyle()}) => {
-	const [_gameList, setGameList] = useState(gameList);
+export const Library = () => {
 	const [filter, setFilter] = useState('');
+	const gameLibrary = useGameLibraryStore(state => state.gameLibrary);
+	// const refresh = useGameLibraryStore(state => state.refresh);
 
 	useEffect(() => {
-		const a = async () => {
-			const list = await Steam.library.list();
-			setGameList(list.filter(game => game.name.toLowerCase().includes(filter.toLowerCase())));
-		}
+		refresh();
+	}, []);
 
-		a();
-	}, [filter]);
-
+	const library = gameLibrary.filter(game => game.name.toLowerCase().includes(filter.toLowerCase()));
+	
 	return (
-		<div id="gr-library" className={className.body}>
-			<div id="gr-library-header" className={className.header}>
+		<div id="gr-library">
+			<div id="gr-library-header">
 				<div>
 					<Label>filter</Label>
 					<Input
@@ -55,8 +34,8 @@ export const Library = ({gameList = [] as Array<Game>, className = libraryStyle(
 					/>
 				</div>
 			</div>
-			<div id="gr-library-content" className={className.content}>
-				{_gameList.map(game => <GameCard key={game.id} game={game} />)}
+			<div id="gr-library-content">
+				{library.map(game => <GameCard key={game.id} game={game} />)}
 			</div>
 		</div>
 	)
