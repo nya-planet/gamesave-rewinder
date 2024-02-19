@@ -1,3 +1,5 @@
+import { convertFileSrc } from '@tauri-apps/api/tauri';
+
 import { useParams } from 'react-router-dom';
 import {
   ToggleButton,
@@ -19,10 +21,9 @@ import { SaveList } from '@/component/SaveList';
 import { GameSave } from '@/types/GameSave';
 import { IChoiceGroupOption } from '@fluentui/react';
 import { ModeSwitch, ViewMode } from '@/component/ModeSwitch';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SaveFileCard } from '@/component/SaveFileCard';
-
-const mockData: Array<Game> = new Array(0);
+import { useGameLibraryStore, refresh } from '@/store/GameLibrary';
 
 const saveMock: Array<GameSave> = new Array(10).fill(0).map((_, i) => ({
   gameId: `${i}`,
@@ -50,6 +51,7 @@ const gameInfoStyle = makeStyles({
     backgroundColor: 'grey',
     display: 'flex',
     alignItems: 'center',
+    columnGap: '1rem',
     ...shorthands.flex(0, 0, '3rem'),
     ...shorthands.padding(0, '1rem'),
   },
@@ -119,8 +121,20 @@ const onChangeModalSelection = (
 export const GameInfo = () => {
   const className = gameInfoStyle();
   const { gameId } = useParams<{ gameId: string }>();
-  const game = mockData.find((g) => g.id === gameId) || DefaultGame();
   const [ viewMode, setViewMode ] = useState<ViewMode>('thumbnail');
+  // const refresh = useGameLibraryStore(state => state.refresh);
+  const gameLibrary = useGameLibraryStore(state => state.gameLibrary);
+  console.log(gameId, gameLibrary);
+  const game = gameLibrary.find((g) => g.id === gameId) || DefaultGame();
+  
+  useEffect(() => {
+    const re = async () => {
+      await refresh();
+      console.log('GameInfo useEffect');
+    };
+
+    re();
+  }, []);
 
   return (
     <div id="gameinfo.body" className={className.body}>
@@ -129,7 +143,8 @@ export const GameInfo = () => {
           <Button style={{ minWidth: '2rem', height: '2rem' }} onClick={onBackClick} shape='square'>
             <BackIcon />
           </Button>
-          <span>{game.name}</span>
+          <img src={convertFileSrc(game.header)} alt={game.name} style={{ height: '43px', width: '92px' }} />
+          <span style={{ fontSize: '2rem' }} >{game.name}</span>
         </div>
         <div id="fuck" className={className.toolbar}>
           <Input></Input>
