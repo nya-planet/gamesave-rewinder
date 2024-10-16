@@ -1,0 +1,10 @@
+[*.rs]
+indent_size = 2
+indent_style = space
+
+[*.tsx]
+indent_size = 2
+indent_style = space
+quote_type = single
+
+[*.ts]
