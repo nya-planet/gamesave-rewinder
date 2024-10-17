@@ -1,0 +1,32 @@
+# This is the configuration file for rustfmt.
+# For more options and details, visit: https://rust-lang.github.io/rustfmt/
+
+# Use spaces instead of tabs
+hard_tabs = false
+
+# Number of spaces per tab
+tab_spaces = 4
+
+# Maximum width of each line
+max_width = 100
+
+# Controls the use of trailing commas
+trailing_comma = "Always"
+
+# Controls the use of single line if statements
+single_line_if_else_max_width = 50
+
+# Controls the use of imports grouping
+group_imports = "StdExternalCrate"
+
+# Controls the use of reordering imports
+reorder_imports = true
+
+# Controls the use of reordering modules
+reorder_modules = true
+
+# Controls the use of wrapping comments
+wrap_comments = true
+
+# Controls the use of formatting match arms
+match_block_trailing_comma = true

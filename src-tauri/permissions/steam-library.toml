@@ -1,0 +1,6 @@
+"$schema" = "schemas/schema.json"
+
+[[permission]]
+identifier = "steam-library"
+description = "Enables the start_server command."
+commands.allow = ["get_game_list"]

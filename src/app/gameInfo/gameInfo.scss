@@ -1,0 +1,46 @@
+#gr-gameinfo {
+	height: 100%;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	
+	#gr-gameinfo-header {
+		flex: 0 0 32px;
+		background-color: gray;
+
+		#gr-gameinfo-info {
+			background-color: gray;
+			display: flex;
+			align-items: center;
+			column-gap: 1rem;
+			flex: 0 0 3rem;
+			padding: 0 1rem;
+		}
+
+		#gr-gameinfo-toolbar {
+			background-color: lightgray;
+			display: flex;
+			align-items: center;
+			flex: 0 0 3rem;
+			padding: 0 1rem;
+
+
+		}
+	}
+
+	#gr-gameinfo-content {
+		flex: 0 0 calc(100% - 6rem);
+		width: 100%;
+		overflow-y: auto;
+
+		#save-container {
+			box-sizing: border-box;
+			padding: 16px;
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+		}
+		.save-file-card {
+			width: 160px;
+		}
+	}
+}

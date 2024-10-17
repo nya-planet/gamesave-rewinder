@@ -1,0 +1,23 @@
+#gr-library {
+	$header-height: 32px;
+
+	height: 100%;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+
+	#gr-library-header {
+		flex: 0 0 $header-height;
+		background-color: gray;
+	}
+
+	#gr-library-content {
+		box-sizing: border-box;
+		padding: 16px;
+		flex: 0 0 calc(100% - $header-height);
+		width: 100%;
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+		overflow-y: auto;
+	}
+}

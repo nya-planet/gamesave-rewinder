@@ -1,51 +1,70 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import { invoke } from "@tauri-apps/api/core";
-import "./App.css";
+import { useState } from 'react';
+import { Button, FluentProvider, webLightTheme, makeStyles } from '@fluentui/react-components';
+import { Nav, INavLinkGroup, INavLink } from '@fluentui/react';
+import { RouterProvider } from 'react-router-dom';
+import i18next from '@/i18n/i18n';
 
-function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
+import { LibraryRoute, SettingsRoute, AboutRoute, router } from '@/router/router';
+import { Titlebar } from '@/component/Titlebar';
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    setGreetMsg(await invoke("greet", { name }));
+import './App.scss';
+import { Window } from '@/backend-command/window';
+import { Steam } from '@/backend-command/command';
+
+const containerInitStyle = makeStyles({
+  provider: {
+    height: '100%',
+    width: '100%',
   }
+});
 
+const onLinkClick = (ev?: React.MouseEvent<HTMLElement>, item?: INavLink): void => {
+  ev?.preventDefault();
+  router.navigate(item?.url || '/');
+};
+
+const navLinkGroups: Array<INavLinkGroup> = [
+  {
+    links: [
+      {
+        name: i18next.t('library'),
+        url: LibraryRoute,
+      },
+      {
+        name: i18next.t('settings'),
+        url: SettingsRoute,
+      },
+      {
+        name: i18next.t('about'),
+        url: AboutRoute,
+      },
+    ],
+  },
+];
+
+export const App = ({
+  theme = webLightTheme,
+  className = containerInitStyle().provider,
+  navGroups = navLinkGroups,
+  grRouter = router,
+}) => {
   return (
-    <main className="container">
-      <h1>Welcome to Tauri + React</h1>
-
-      <div className="row">
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <FluentProvider theme={theme} className={className}>
+    <div id="gr-container">
+      <div id="gr-header">
+        <Titlebar />
       </div>
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
-
-      <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
-      </form>
-      <p>{greetMsg}</p>
-    </main>
+      <div id="gr-body">
+        <div id="gr-left-sidebar">
+          <Nav groups={navGroups} onLinkClick={onLinkClick}></Nav>
+        </div>
+        <div id="gr-content">
+          <RouterProvider router={grRouter} />
+        </div>
+      </div>
+    </div>
+    </FluentProvider>
   );
 }
 
-export default App;
+// Window.minimize();
