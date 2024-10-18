@@ -4,7 +4,6 @@ use std::{
 };
 
 use crate::{
-    command::steam_library,
     game_library::{self, steam, Game, GamePlatform},
     system_info, utils,
 };

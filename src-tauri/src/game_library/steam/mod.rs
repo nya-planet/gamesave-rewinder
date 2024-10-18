@@ -93,6 +93,7 @@ pub trait SteamLibrary {
     fn get_game_acf(&self, appid: &str) -> Result<SteamAppConfigurationFile, ()>;
 }
 
+#[derive(Debug)]
 pub struct Steam {
     pub install_path: PathBuf,
     pub steamapps: PathBuf,
@@ -115,10 +116,9 @@ impl Steam {
             Err(err) => panic!("Failed to read libraryfolders.vdf: {:?}", err),
         };
 
-        let libraryfolder_map: BTreeMap<String, SteamLibraryfolder> =
-            keyvalues_serde::from_str(&libraryfolders_vdf_content).unwrap();
+        let libraryfolder_map: BTreeMap<String, SteamLibraryfolder> = keyvalues_serde::from_str(&libraryfolders_vdf_content).unwrap();
         println!("libraryfolder_map {:?}", libraryfolder_map);
-        let libraryfolder_list: Vec<SteamLibraryfolder> = libraryfolder_map.into_values().filter(|s| { File::open(&s.path).is_ok() }).collect();
+        let libraryfolder_list: Vec<SteamLibraryfolder> = libraryfolder_map.into_values().filter(|s| { File::open(&s.path).is_err() }).collect();
         let game_list: Vec<SteamGame> = libraryfolder_list
             .iter()
             .map(|l| {

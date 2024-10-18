@@ -4,8 +4,6 @@ import { App } from './App';
 import '@/i18n/i18n';
 import { invoke } from '@tauri-apps/api/core';
 
-window.invoke = invoke;
-
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <App />
