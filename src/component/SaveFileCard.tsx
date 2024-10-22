@@ -4,7 +4,6 @@ import {
   CardFooter,
   CardHeader,
   CardPreview,
-  makeStyles,
 } from '@fluentui/react-components';
 
 import { DownloadIcon, DeleteIcon } from '@fluentui/react-icons-mdl2';

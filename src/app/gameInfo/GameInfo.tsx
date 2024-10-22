@@ -4,8 +4,6 @@ import { useParams } from 'react-router-dom';
 import {
   ToggleButton,
   Input,
-  makeStyles,
-  shorthands,
   Button,
 } from '@fluentui/react-components';
 import {
@@ -19,13 +17,14 @@ import { router } from '@/router/router';
 
 import { SaveList } from '@/component/SaveList';
 import { GameSave } from '@/types/GameSave';
-import { IChoiceGroupOption } from '@fluentui/react';
+// import { IChoiceGroupOption } from '@fluentui/react';
 import { ModeSwitch, ViewMode } from '@/component/ModeSwitch';
 import { useEffect, useState } from 'react';
 import { SaveFileCard } from '@/component/SaveFileCard';
 import { useGameLibraryStore, refresh } from '@/store/GameLibrary';
 
 import './GameInfo.scss';
+import { styled } from 'styled-components';
 
 const saveMock: Array<GameSave> = new Array(10).fill(0).map((_, i) => ({
   gameId: `${i}`,
@@ -42,10 +41,10 @@ const onBackClick = () => {
   // console.log('onBackClick');
 };
 
-const choiceGroupOptions: Array<IChoiceGroupOption> = [
-  { key: 'list', text: 'list', iconProps: { iconName: 'CalendarIcon' } },
-  { key: 'picture', text: 'picture', iconProps: { iconName: 'PictureCenter' } },
-];
+// const choiceGroupOptions: Array<IChoiceGroupOption> = [
+//   { key: 'list', text: 'list', iconProps: { iconName: 'CalendarIcon' } },
+//   { key: 'picture', text: 'picture', iconProps: { iconName: 'PictureCenter' } },
+// ];
 
 const onChangeText = (
   ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,

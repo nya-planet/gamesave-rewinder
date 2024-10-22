@@ -3,13 +3,19 @@ import { Button, FluentProvider, webLightTheme, makeStyles } from '@fluentui/rea
 import { Nav, INavLinkGroup, INavLink } from '@fluentui/react';
 import { RouterProvider } from 'react-router-dom';
 import i18next from '@/i18n/i18n';
+import styled from 'styled-components';
 
 import { LibraryRoute, SettingsRoute, AboutRoute, router } from '@/router/router';
 import { Titlebar } from '@/component/Titlebar';
 
-import './App.scss';
+import './init.scss';
 import { Window } from '@/backend-command/window';
 import { Steam } from '@/backend-command/command';
+
+// const FluentProviderWrapper = styled(FluentProvider)`
+//   height: 100%;
+//   width: 100%;
+// `;
 
 const containerInitStyle = makeStyles({
   provider: {
@@ -42,6 +48,40 @@ const navLinkGroups: Array<INavLinkGroup> = [
   },
 ];
 
+const GrContainer = styled.div`
+  box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  --gr-header-height: 32px;
+
+  #gr-header {
+    height: 100%;
+    width: 100%;
+    flex: 0 0 var(--gr-header-height);
+    background-color: gray;
+  }
+
+  #gr-body {
+    flex: 0 0 calc(100% - var(--gr-header-height));
+    height: calc(100% - var(--gr-header-height));
+    width: 100%;
+    display: flex;
+
+    #gr-left-sidebar {
+      width: 100%;
+      flex: 0 0 20%;
+    }
+
+    #gr-content {
+      width: 100%;
+      flex: 0 0 80%;
+    }
+  }
+`;
 export const App = ({
   theme = webLightTheme,
   className = containerInitStyle().provider,
@@ -50,7 +90,7 @@ export const App = ({
 }) => {
   return (
     <FluentProvider theme={theme} className={className}>
-    <div id="gr-container">
+    <GrContainer id="gr-container">
       <div id="gr-header">
         <Titlebar />
       </div>
@@ -62,7 +102,7 @@ export const App = ({
           <RouterProvider router={grRouter} />
         </div>
       </div>
-    </div>
+    </GrContainer>
     </FluentProvider>
   );
 }
